@@ -8,7 +8,6 @@ import java.util.List;
 
 public class SpecificationsBuilder {
     private final List<SpecSearchCriteria> params;
-
     public SpecificationsBuilder() {
         params = new ArrayList<>();
     }
