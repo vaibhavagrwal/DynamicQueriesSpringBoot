@@ -2,19 +2,17 @@ package com.sub.sublayer.specifications;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 
 public class EntitySpecification<T> implements Specification<T> {
-    private SearchCriteria criteria = new SearchCriteria();
+    private SearchCriteria criteria;
 
     public EntitySpecification(SpecSearchCriteria specSearchCriteria) {
-        criteria.setKey(specSearchCriteria.getKey());
-        criteria.setOperation(specSearchCriteria.getOperation().toString());
-        criteria.setValue(specSearchCriteria.getValue());
+        criteria= new SearchCriteria(specSearchCriteria.getKey(),specSearchCriteria.getOperation(),specSearchCriteria.getValue());
     }
 
     @Override

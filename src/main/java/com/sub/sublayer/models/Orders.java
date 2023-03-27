@@ -1,16 +1,16 @@
 package com.sub.sublayer.models;
 
-
-import lombok.Getter;
-import lombok.Setter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
+
 
 @Entity
 @Getter
 @Setter
-public class User {
+public class Orders {
     @Id
     String id;
-    String name;
+    String user_id;
 }
