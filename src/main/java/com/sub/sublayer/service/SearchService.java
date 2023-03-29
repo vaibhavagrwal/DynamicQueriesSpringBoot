@@ -28,6 +28,7 @@ import com.mysql.cj.x.protobuf.MysqlxExpr;
 import com.sub.sublayer.models.QueryRequest;
 import com.sub.sublayer.models.QueryResponse;
 import com.sub.sublayer.repository.OrdersRepository;
+import com.sub.sublayer.repository.SubsRepository;
 import com.sub.sublayer.repository.UserRepository;
 //import com.sub.sublayer.specifications.SpecificationsBuilder;
 import com.sub.sublayer.specifications.SpecificationsBuilder;
@@ -43,6 +44,8 @@ public class SearchService {
     UserRepository userRepository;
     @Autowired
     OrdersRepository ordersRepository;
+    @Autowired
+    SubsRepository subsRepository;
 
     public QueryResponse getQueryResponse(QueryRequest queryRequest){
         SpecificationsBuilder builder=new SpecificationsBuilder();
@@ -69,21 +72,26 @@ public class SearchService {
 
         if(queryRequest.getEntity().toString().equals("user"))
             list= userRepository.findAll(spec);
-        else
+        else if(queryRequest.getEntity().toString().equals("orders"))
             list= ordersRepository.findAll(spec);
+        else
+            list= subsRepository.findAll(spec);
+
+        System.out.println(list);
 
         ObjectMapper mapper=new ObjectMapper();
-        List<Map<String,String>> mapList= new ArrayList<>();
+        List<Map<String,Object>> mapList= new ArrayList<>();
 
         for(int i=0;i<list.size();i++){
             Map<String,Object> m= mapper.convertValue(list.get(i),Map.class);
-            Map<String,String> mp= new HashMap<>();
+            Map<String,Object> mp= new HashMap<>();
 
             for(int j=0;j<queryRequest.getAttributes().size();j++){
-                mp.put(queryRequest.getAttributes().get(j),m.get(queryRequest.getAttributes().get(j)).toString());
+                mp.put(queryRequest.getAttributes().get(j),m.get(queryRequest.getAttributes().get(j)));
             }
-            mapList.add(mp);
+             mapList.add(mp);
         }
+
 
         return QueryResponse
                 .builder()

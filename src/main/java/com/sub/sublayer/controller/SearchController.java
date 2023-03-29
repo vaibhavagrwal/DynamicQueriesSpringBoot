@@ -14,21 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class SearchController {
     @Autowired
     SearchService searchService;
-
     @PostMapping(value = "/search")
     public ResponseEntity<QueryResponse> searchEntity(@RequestBody QueryRequest queryRequest){
         QueryResponse queryRequestResponse=searchService.getQueryResponse(queryRequest);
-        //System.out.println("ok");
         return ResponseEntity.status(200).body(queryRequestResponse);
     }
-
-//    @GetMapping(value = "/search")
-//    public ResponseEntity<QueryResponse> searchEntity(){
-//        QueryResponse queryRequestResponse=searchService.getQueryResponse();
-//        //System.out.println("ok");
-//        return ResponseEntity.status(200).body(queryRequestResponse);
-//    }
-
     @GetMapping("/health")
     public String health() {
         return "ok";

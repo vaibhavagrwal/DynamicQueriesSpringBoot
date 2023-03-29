@@ -12,5 +12,5 @@ import java.util.Map;
 @Setter
 public class QueryResponse {
     String entity;
-    List<Map<String,String>> objectList;
+    List<Map<String,Object>> objectList;
 }
