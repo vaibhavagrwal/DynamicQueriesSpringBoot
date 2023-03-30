@@ -11,5 +11,4 @@ public class SublayerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SublayerApplication.class, args);
 	}
-
 }

@@ -38,6 +38,25 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+//  path===>   subs->orders->user
+//
+//    {
+//            "targetEntity": "user",   // Required Entity
+//            "targetAttributes": ["name"],
+//            "entityPath": ["order","user"],
+//            "conditionEntity":"subs"
+//            "conditions":
+//            [
+//                {
+//                     "attribute":"id",
+//                     "value": "1001",
+//                     "operation": ":",
+//                     "joinType": "AND"
+//                }
+//            ]
+//    }
+//
+
 @Service
 public class SearchService {
     @Autowired
@@ -48,6 +67,9 @@ public class SearchService {
     SubsRepository subsRepository;
 
     public QueryResponse getQueryResponse(QueryRequest queryRequest){
+
+        System.out.println(queryRequest.toString());
+
         SpecificationsBuilder builder=new SpecificationsBuilder();
 
         for(int i=0;i<queryRequest.getConditions().size();i++){
@@ -60,7 +82,7 @@ public class SearchService {
             );
         }
 
-        Specification spec= builder.build();
+        Specification spec=  builder.build();
 //
 //        UserSpecification spec =
 //                new UserSpecification(new SearchCriteria("id", ":", 1));
@@ -70,9 +92,9 @@ public class SearchService {
 
         //System.out.println(queryRequest.getEntity());
 
-        if(queryRequest.getEntity().toString().equals("user"))
+        if(queryRequest.getConditionEntity().toString().equals("user"))
             list= userRepository.findAll(spec);
-        else if(queryRequest.getEntity().toString().equals("orders"))
+        else if(queryRequest.getConditionEntity().toString().equals("orders"))
             list= ordersRepository.findAll(spec);
         else
             list= subsRepository.findAll(spec);
@@ -84,10 +106,24 @@ public class SearchService {
 
         for(int i=0;i<list.size();i++){
             Map<String,Object> m= mapper.convertValue(list.get(i),Map.class);
+
+//            System.out.println(mLarge.get("order"));
+//            Map<String,Object> m=mapper.convertValue(mLarge.get(queryRequest.getEntity()),Map.class);
+             System.out.println(m);
+             System.out.println(queryRequest.getEntityPath());
+            for(int j=0;j<queryRequest.getEntityPath().size();j++){
+                m=mapper.convertValue(m.get(queryRequest.getEntityPath().get(j)),Map.class);
+            }
+
+            System.out.println("*****"+m);
+
+            if(queryRequest.getEntityPath().size()>0)
+            m=mapper.convertValue(m.get(queryRequest.getTargetEntity()),Map.class);
+
             Map<String,Object> mp= new HashMap<>();
 
-            for(int j=0;j<queryRequest.getAttributes().size();j++){
-                mp.put(queryRequest.getAttributes().get(j),m.get(queryRequest.getAttributes().get(j)));
+            for(int j=0;j<queryRequest.getTargetAttributes().size();j++){
+                mp.put(queryRequest.getTargetAttributes().get(j),m.get(queryRequest.getTargetAttributes().get(j)));
             }
              mapList.add(mp);
         }
@@ -95,7 +131,7 @@ public class SearchService {
 
         return QueryResponse
                 .builder()
-                .entity(queryRequest.getEntity())
+                .entity(queryRequest.getTargetEntity())
                 .objectList(mapList)
                 .build();
     }
