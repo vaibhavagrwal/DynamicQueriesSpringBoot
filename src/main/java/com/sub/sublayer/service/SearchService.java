@@ -25,6 +25,8 @@ package com.sub.sublayer.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysql.cj.x.protobuf.MysqlxExpr;
+import com.sub.sublayer.models.Order;
+import com.sub.sublayer.models.Orders;
 import com.sub.sublayer.models.QueryRequest;
 import com.sub.sublayer.models.QueryResponse;
 import com.sub.sublayer.repository.OrdersRepository;
@@ -57,6 +59,8 @@ import java.util.*;
 //    }
 //
 
+
+
 @Service
 public class SearchService {
     @Autowired
@@ -65,6 +69,7 @@ public class SearchService {
     OrdersRepository ordersRepository;
     @Autowired
     SubsRepository subsRepository;
+
 
     public QueryResponse getQueryResponse(QueryRequest queryRequest){
 

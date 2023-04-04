@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpecificationsBuilder {
+public class SpecificationsBuilder<T> {
     private final List<SpecSearchCriteria> params;
     public SpecificationsBuilder() {
         params = new ArrayList<>();
@@ -30,7 +30,7 @@ public class SpecificationsBuilder {
         if (params.size() == 0)
             return null;
 
-        Specification result = new EntitySpecification<User>(params.get(0));
+        Specification result = new EntitySpecification<T>(params.get(0));
 
         for (int i = 1; i < params.size(); i++) {
             result = params.get(i).isOrPredicate()

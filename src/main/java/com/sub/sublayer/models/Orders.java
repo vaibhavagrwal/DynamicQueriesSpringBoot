@@ -1,5 +1,6 @@
 package com.sub.sublayer.models;
 
+import com.sub.sublayer.enums.OrderStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
